@@ -72,20 +72,21 @@ async function getUsersPendingReminder() {
 
   const users = [];
   const now = new Date();
+  const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000;
 
   worksheet.eachRow((row, rowNumber) => {
     if (rowNumber === 1) return;
 
-    const scheduledAt = row.getCell(19).value; // reminderEmailScheduledAt is column 19
+    const sentAt = row.getCell(18).value;   // suggestionEmailSentAt is column 18
     const userStatus = row.getCell(20).value; // userStatus is column 20
 
-    if (scheduledAt && userStatus !== 'reminded') {
-      const scheduledDate = new Date(scheduledAt);
-      if (now >= scheduledDate) {
+    if (sentAt && userStatus !== 'reminded' && userStatus !== 'completed') {
+      const sentDate = new Date(sentAt);
+      if (now - sentDate >= FORTY_EIGHT_HOURS_MS) {
         users.push({
-          userId: row.getCell(1).value, // userId is column 1
-          name: row.getCell(2).value, // name is column 2
-          email: row.getCell(3).value, // email is column 3
+          userId: row.getCell(1).value,
+          name: row.getCell(2).value,
+          email: row.getCell(3).value,
         });
       }
     }
