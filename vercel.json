@@ -1,0 +1,18 @@
+{
+  "buildCommand": "craco build",
+  "outputDirectory": "build",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/reminder",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}
